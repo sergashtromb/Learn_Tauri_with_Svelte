@@ -25,6 +25,7 @@
       invoke("parse_file_tasks", {path: path} )
         .then((result) => {
           tasks = JSON.parse(result);
+          console.log(tasks);
         });
     } 
   }
@@ -58,6 +59,15 @@
   margin: auto, 0;
 }
 
+li {
+  list-style-type: none;
+}
+
+ul {
+  padding-inline-start: 0px;
+}
+
+
 </style>
 
 <div id="main_container">
@@ -67,8 +77,8 @@
   <div id="list_tasks">
 
     <ul>
-        {#each tasks as elem, index (index)}
-          <li><Task {...elem} /> </li> 
+        {#each tasks as elem}
+          <li><Task tasks_text={elem.text} is_done={elem.is_done} task_id={elem.id}/> </li> 
         {/each}
     </ul>
 

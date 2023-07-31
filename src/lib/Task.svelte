@@ -5,7 +5,7 @@
 
     export let tasks_text = "Новая задача";
     export let is_done = false;
-    export let id = 0;
+    export let task_id = 0;
     
 
     
@@ -32,7 +32,7 @@ div  {
     border-radius: 15px;
     margin-top: 10px;
     margin-bottom: 10px;
-    
+    padding: 10px 5px;
 }
 
 </style>
@@ -40,7 +40,7 @@ div  {
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div>
-    <input type="checkbox" bind:value={is_done} id="main_checkbox"><label for="main_checkbox">{tasks_text}</label>
+    <input type="checkbox" bind:checked={is_done} id="main_checkbox"><label for="main_checkbox">{tasks_text}</label>
 </div>
 
         
