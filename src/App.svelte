@@ -80,6 +80,7 @@ ul {
         {#each tasks as elem}
           <li><Task tasks_text={elem.text} is_done={elem.is_done} task_id={elem.id}/> </li> 
         {/each}
+        <li><button>+ Добавить задачу</button></li>
     </ul>
 
   </div>

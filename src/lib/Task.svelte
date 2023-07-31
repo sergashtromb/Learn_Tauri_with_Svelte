@@ -28,10 +28,9 @@
 <style>
 
 div  {
-    border: 2px solid black;
+    border: 3px solid rgb(29, 29, 29);
     border-radius: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
     padding: 10px 5px;
 }
 
