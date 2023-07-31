@@ -61,13 +61,17 @@
 </style>
 
 <div id="main_container">
-
+  <div id="tools">
+    <button on:click={get_tasks}>Загрузить задачи из файла</button>
+  </div>
   <div id="list_tasks">
 
     <ul>
-
+        {#each tasks as elem, index (index)}
+          <li><Task {...elem} /> </li> 
+        {/each}
     </ul>
-    
+
   </div>
 
 </div>
