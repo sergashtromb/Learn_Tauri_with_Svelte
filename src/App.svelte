@@ -54,7 +54,27 @@
 </script>
 
 <style>
-  
+
+.modal_window {
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color:rgba(0, 0, 0, 0.4);
+  overflow: auto;
+  z-index: 1;
+}
+
+.modal_content {
+  margin: 0 auto;
+  width: 75%;
+  background-color: #0f0f0f;
+  padding: 20px;
+  position: relative;
+}
+
 #main_container {
   margin: auto, 0;
 }
@@ -71,6 +91,15 @@ ul {
 </style>
 
 <div id="main_container">
+
+  <dev class="modal_window">
+
+    <dev class="modal_content">
+      <p>content</p>
+    </dev>
+
+  </dev>
+
   <div id="tools">
     <button on:click={get_tasks}>Загрузить задачи из файла</button>
   </div>
