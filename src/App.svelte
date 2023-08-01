@@ -78,7 +78,14 @@ ul {
 
     <ul>
         {#each tasks as elem}
-          <li><Task tasks_text={elem.text} is_done={elem.is_done} task_id={elem.id}/> </li> 
+          <li>
+            <Task
+            tasks_text={elem.text}
+            is_done={elem.is_done}
+            task_id={elem.id}
+            on:change_task_status={(event) => {
+              tasks.find(task => task.id == event.detail.task_id).is_done = event.detail.is_done;
+            }}/> </li> 
         {/each}
         <li><button>+ Добавить задачу</button></li>
     </ul>

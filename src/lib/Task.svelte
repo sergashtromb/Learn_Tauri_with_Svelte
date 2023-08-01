@@ -12,16 +12,13 @@
 
     const dispatch = createEventDispatcher();
 
-    // function taskHandler() {
+    function change_status() {
 
-    //     console.log(id);  
-    //     invoke("console_writeln", { text: String(id) });
-
-    //     dispatch('checkTask', {
-    //         status_done: is_done,
-    //         tasks_id: id
-    //     });
-    // }
+        dispatch('change_task_status', {
+            is_done: is_done,
+            task_id: task_id
+        });
+    }
 
 </script>
 
@@ -39,7 +36,7 @@ div  {
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div>
-    <input type="checkbox" bind:checked={is_done} id="main_checkbox"><label for="main_checkbox">{tasks_text}</label>
+    <input type="checkbox" bind:checked={is_done} id="main_checkbox" on:change={change_status}><label for="main_checkbox">{tasks_text}</label>
 </div>
 
         

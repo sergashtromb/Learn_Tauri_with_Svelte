@@ -21,8 +21,6 @@ extern crate serde_json;
 
 fn main() {
     tauri::Builder::default()
-        // .invoke_handler(tauri::generate_handler![greet])
-        //.invoke_handler(tauri::generate_handler![console_writeln])
         .invoke_handler(tauri::generate_handler![parse_file_tasks, console_writeln])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
