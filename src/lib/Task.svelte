@@ -20,6 +20,13 @@
         });
     }
 
+    function choose_task() {
+        dispatch('choose_task', {
+            task_id: task_id,
+            tasks_text: tasks_text
+        })
+    }
+
 </script>
 
 <style>
@@ -35,7 +42,7 @@ div  {
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div>
+<div on:click={choose_task}>
     <input type="checkbox" bind:checked={is_done} id="main_checkbox" on:change={change_status}><label for="main_checkbox">{tasks_text}</label>
 </div>
 

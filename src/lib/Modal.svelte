@@ -1,4 +1,8 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
+
 	export let showModal; // boolean
 
 	let dialog; // HTMLDialogElement
@@ -12,9 +16,9 @@
         background-color: #2f2f2f;
         border-radius: 0.2em;
 		border: none;
-		padding: 0;
 	}
     #content {
+        padding: 0;
         color: #fff;
         position: relative;
     }
@@ -61,6 +65,11 @@
 		<slot name="modal_content" />
 		<hr />
 		<!-- svelte-ignore a11y-autofocus -->
-		<button autofocus on:click={() => dialog.close()}>close modal</button>
+		<button
+            autofocus 
+            on:click={() => {
+                dispatch("modal_close")
+                dialog.close()
+            }}>close modal</button>
 	</div>
 </dialog>

@@ -9,11 +9,11 @@
   // C:\Users\Sergio\Desktop\tasks.txt
   let tasks = [];
   let path = " ";
-  let showModal = true;
-
+  let showModal = false;
+  let tt = ""
 
   async function get_tasks() {
-
+    // открывает проводник для выбора файла
     const selected = await open({
       multiple: true,
       filters: [{
@@ -22,13 +22,13 @@
       }]
     });
 
+    // после выбора возвращается массив с путями файлов
     if (Array.isArray(selected)) {
       path = selected[0];
-
+      // берем нужный и отправляем на обработку на "сервер"
       invoke("parse_file_tasks", {path: path} )
         .then((result) => {
           tasks = JSON.parse(result);
-          console.log(tasks);
         });
     } 
   }
@@ -71,10 +71,10 @@ ul {
 
   <div class="modal_window">
 
-    <Modal bind:showModal>
+    <Modal bind:showModal on:modal_close={() => tt=""}>
 
-      <h3 slot="modal_header">hello world</h3>
-      <p slot="modal_content">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo, magnam.</p>
+      <h3 slot="modal_header">Задача</h3>
+      <p slot="modal_content">{tt}</p>
 
     </Modal>
 
@@ -92,6 +92,10 @@ ul {
             tasks_text={elem.text}
             is_done={elem.is_done}
             task_id={elem.id}
+            on:choose_task={(event) => {
+              tt = event.detail.tasks_text;
+              showModal = true;
+              }}
             on:change_task_status={(event) => {
               tasks.find(task => task.id == event.detail.task_id).is_done = event.detail.is_done;
             }}/> </li> 
