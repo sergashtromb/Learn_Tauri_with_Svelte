@@ -4,10 +4,13 @@
   import { open } from '@tauri-apps/api/dialog';
 
   import Task from "./lib/Task.svelte"
-  
+  import Modal from "./lib/Modal.svelte";
+
   // C:\Users\Sergio\Desktop\tasks.txt
   let tasks = [];
   let path = " ";
+  let showModal = true;
+
 
   async function get_tasks() {
 
@@ -55,30 +58,6 @@
 
 <style>
 
-.modal_window {
-  display: block;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-color:rgba(0, 0, 0, 0.4);
-  overflow: auto;
-  z-index: 1;
-}
-
-.modal_content {
-  margin: 0 auto;
-  width: 75%;
-  background-color: #0f0f0f;
-  padding: 20px;
-  position: relative;
-}
-
-#main_container {
-  margin: auto, 0;
-}
-
 li {
   list-style-type: none;
 }
@@ -86,19 +65,20 @@ li {
 ul {
   padding-inline-start: 0px;
 }
-
-
 </style>
 
 <div id="main_container">
 
-  <dev class="modal_window">
+  <div class="modal_window">
 
-    <dev class="modal_content">
-      <p>content</p>
-    </dev>
+    <Modal bind:showModal>
 
-  </dev>
+      <h3 slot="modal_header">hello world</h3>
+      <p slot="modal_content">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo, magnam.</p>
+
+    </Modal>
+
+  </div>
 
   <div id="tools">
     <button on:click={get_tasks}>Загрузить задачи из файла</button>
