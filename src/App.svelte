@@ -11,6 +11,7 @@
   let path = " ";
   let showModal = false;
   let tt = ""
+  let forModal = "";
 
   async function get_tasks() {
     // открывает проводник для выбора файла
@@ -71,11 +72,7 @@ ul {
 
   <div class="modal_window">
 
-    <Modal bind:showModal on:modal_close={() => tt=""}>
-
-      <h3 slot="modal_header">Задача</h3>
-      <p slot="modal_content">{tt}</p>
-
+    <Modal bind:showModal bind:typeModal={forModal} on:modal_close={() => tt=""}>
     </Modal>
 
   </div>
@@ -93,7 +90,7 @@ ul {
             is_done={elem.is_done}
             task_id={elem.id}
             on:choose_task={(event) => {
-              tt = event.detail.tasks_text;
+              forModal = "edit-task";
               showModal = true;
               }}
             on:change_task_status={(event) => {

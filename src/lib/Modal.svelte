@@ -4,6 +4,7 @@
     const dispatch = createEventDispatcher();
 
 	export let showModal; // boolean
+	export let typeModal; // boolean
 
 	let dialog; // HTMLDialogElement
 	//on:click|self={() => dialog.close()}
@@ -60,10 +61,12 @@
 	on:close={() => (showModal = false)} >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div id="content">
-		<slot name="modal_header" />
-		<hr />
-		<slot name="modal_content" />
-		<hr />
+		{#if typeModal === "message"}
+			<slot name="modal_header" />
+			<hr />
+			<slot name="modal_content" />
+			<hr />
+		{/if}
 		<!-- svelte-ignore a11y-autofocus -->
 		<button
             autofocus 
