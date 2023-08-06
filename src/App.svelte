@@ -23,13 +23,13 @@
     },
   }
 
-  async function get_tasks() {
+  async function get_tasks_from_md() {
     // открывает проводник для выбора файла
     const selected = await open({
       multiple: true,
       filters: [{
         name: 'Task',
-        extensions: ['txt']
+        extensions: ['md']
       }]
     });
 
@@ -109,7 +109,7 @@ ul {
   </div>
 
   <div id="tools">
-    <button on:click={get_tasks}>Загрузить задачи из файла</button>
+    <button on:click={get_tasks_from_md}>Ипорт задач из .md файлов</button>
   </div>
   <div id="list_tasks">
 

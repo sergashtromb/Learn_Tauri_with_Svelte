@@ -43,6 +43,7 @@
         padding: 0;
         color: #fff;
         position: relative;
+		width: 90%;
     }
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
@@ -77,7 +78,11 @@
 	}
 
 	hr {
+		width: 100%;
 		margin: 20px 0px;
+	}
+	#tasks_text {
+		width: 100%;
 	}
 </style>
 
@@ -98,6 +103,7 @@
 			<h2>Редактирование задачи</h2>
 			<hr />
 			<input
+				id="tasks_text"
 				type="text"
 				bind:value={outArgumetns.tasks_text}>
 			<hr />
