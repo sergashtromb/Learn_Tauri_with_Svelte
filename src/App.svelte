@@ -6,6 +6,8 @@
   import Task from "./lib/Task.svelte"
   import Modal from "./lib/Modal.svelte";
 
+  import { get_last_id } from "./tools/small_operation";
+
   let tasks = [];
   let path = " ";
   let showModal = false;
@@ -135,7 +137,11 @@ ul {
             }}/> </li> 
         {/each}
     </ul>
-    <button>+ Добавить задачу</button>
+    <button 
+      on:click={() => {
+        tasks = tasks.concat({ id: get_last_id(tasks) + 1, text: "Новая задача", is_done: false});
+      }}
+      >+ Добавить задачу</button>
   </div>
 
 </div>
