@@ -4,11 +4,32 @@
     const dispatch = createEventDispatcher();
 
 	export let showModal; // boolean
-	export let typeModal; // boolean
+	export let typeModal; // string
+	export let isJustClosing; // boolean
+	export let outArgumetns; // объект который принимает внешние аргументы как данные при вызове модального окна
+
 
 	let dialog; // HTMLDialogElement
-	//on:click|self={() => dialog.close()}
+
 	$: if (dialog && showModal) dialog.showModal();
+
+	function dialog_close() {
+
+		dispatch("dialog_out", {
+			saveData: outArgumetns,
+			type: typeModal
+		});
+
+		showModal = false;
+		typeModal = "";
+	}
+
+	function click_with_dialog() {
+		if (isJustClosing) {
+			dialog.close();
+		}
+	}
+
 </script>
 
 <style>
@@ -49,16 +70,23 @@
 		}
 	}
 	button {
-		display: block;
+		display: inline-block;
+	}
+	#button_closing {
+		float: right;
 	}
 
+	hr {
+		margin: 20px 0px;
+	}
 </style>
 
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
 	bind:this={dialog}
-	on:close={() => (showModal = false)} >
+	on:close={dialog_close}
+	on:click|self={click_with_dialog} >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div id="content">
 		{#if typeModal === "message"}
@@ -66,13 +94,34 @@
 			<hr />
 			<slot name="modal_content" />
 			<hr />
+		{:else if typeModal === "edit-task"}
+			<h2>Редактирование задачи</h2>
+			<hr />
+			<input
+				type="text"
+				bind:value={outArgumetns.tasks_text}>
+			<hr />
 		{/if}
 		<!-- svelte-ignore a11y-autofocus -->
-		<button
+		<div id="buttons_container">
+
+			{#if typeModal === "edit-task"}
+				<button
+					id="button_save"
+					on:click={() => {
+						dialog.close();
+					}}>
+					Сохранить задачу
+				</button>
+			{/if}
+
+			<button
+			id="button_closing"
             autofocus 
             on:click={() => {
-                dispatch("modal_close")
-                dialog.close()
-            }}>close modal</button>
+                dialog.close();
+            }}>Закрыть окно</button>
+		</div>
+		
 	</div>
 </dialog>

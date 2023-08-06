@@ -52,7 +52,7 @@ div  {
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div on:click|stopPropagation={choose_task}>
+<div on:click={choose_task}>
     <p><input type="checkbox" bind:checked={is_done} id="main_checkbox" on:click|stopPropagation={change_status} />{tasks_text}</p>
 </div>
 

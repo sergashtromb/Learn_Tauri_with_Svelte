@@ -6,12 +6,20 @@
   import Task from "./lib/Task.svelte"
   import Modal from "./lib/Modal.svelte";
 
-  // C:\Users\Sergio\Desktop\tasks.txt
   let tasks = [];
   let path = " ";
   let showModal = false;
-  let tt = ""
-  let forModal = "";
+
+  let dialogSettings = {
+    "for_modal": "",
+    "is_just_closing": false,
+    "argumetns": {},
+    "clear_param": function() { 
+      this.for_modal = "";
+      this.is_just_closing = false;
+      this.argumetns = {};
+    },
+  }
 
   async function get_tasks() {
     // открывает проводник для выбора файла
@@ -55,6 +63,21 @@
   });
 
 
+  function dialog_out(event) {
+
+    dialogSettings.clear_param();
+    
+    if(event.detail.saveData === null) {
+      return;
+    }
+
+    if(event.detail.type === "edit-task") {
+      tasks.find(task => task.id == event.detail.saveData.task_id).text = event.detail.saveData.tasks_text;
+      tasks = tasks;
+    }
+    
+  }
+
 </script>
 
 <style>
@@ -72,7 +95,13 @@ ul {
 
   <div class="modal_window">
 
-    <Modal bind:showModal bind:typeModal={forModal} on:modal_close={() => tt=""}>
+    <Modal
+      bind:showModal
+      bind:typeModal={dialogSettings.for_modal}
+      bind:isJustClosing={dialogSettings.is_just_closing}
+      bind:outArgumetns={dialogSettings.argumetns}
+      on:dialog_out={dialog_out}>
+
     </Modal>
 
   </div>
@@ -90,16 +119,23 @@ ul {
             is_done={elem.is_done}
             task_id={elem.id}
             on:choose_task={(event) => {
-              forModal = "edit-task";
+
+              dialogSettings.for_modal = "edit-task";
+              dialogSettings.is_just_closing = false;
+
+              dialogSettings.argumetns = {
+                "task_id": event.detail.task_id,
+                "tasks_text": event.detail.tasks_text
+              };
+
               showModal = true;
               }}
             on:change_task_status={(event) => {
               tasks.find(task => task.id == event.detail.task_id).is_done = event.detail.is_done;
             }}/> </li> 
         {/each}
-        <li><button>+ Добавить задачу</button></li>
     </ul>
-
+    <button>+ Добавить задачу</button>
   </div>
 
 </div>
