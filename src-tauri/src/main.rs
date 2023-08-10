@@ -4,6 +4,15 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use regex::Regex;
+extern crate postgres;
+
+use postgres::{Connection, SslMode};
+
+struct User {
+    id: i32,
+    name: String,
+    password: String
+}
 
 
 extern crate serde;
