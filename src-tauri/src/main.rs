@@ -61,7 +61,7 @@ fn parse_file_tasks(path: &str) -> String {
         match re.captures(elem) {
             Some(caps) => {
                 // записываем результат увеличиваем индекс
-                result_arr.push(get_task_from_string(caps[0].to_string(), i));
+                result_arr.push(get_task_from_md_format(caps[0].to_string(), i));
                 i += 1;
             },
             _ => continue
@@ -74,7 +74,7 @@ fn parse_file_tasks(path: &str) -> String {
     return json;
 }
 
-fn get_task_from_string(str: String, index: u16) -> Task {
+fn get_task_from_md_format(str: String, index: u16) -> Task {
     // создаем объект задачи и присваиваем ему индекс
     let mut result_task: Task = Task { id: index, text: "".to_string(), is_done: true };
 

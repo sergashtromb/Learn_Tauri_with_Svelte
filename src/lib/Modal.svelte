@@ -122,9 +122,9 @@
 			{/if}
 
 			<button
-			id="button_closing"
-            autofocus 
-            on:click={() => {
+				id="button_closing"
+            	autofocus 
+            	on:click={() => {
                 dialog.close();
             }}>Закрыть окно</button>
 		</div>

@@ -2,15 +2,21 @@
 
   import { invoke } from "@tauri-apps/api/tauri"
   import { open } from '@tauri-apps/api/dialog';
+  import { documentDir } from '@tauri-apps/api/path';
 
   import Task from "./lib/Task.svelte"
   import Modal from "./lib/Modal.svelte";
 
   import { get_last_id } from "./tools/small_operation";
 
+  const docDir = documentDir();
+  
   let tasks = [];
   let path = " ";
   let showModal = false;
+  let current_user_id = 0;
+  let is_sign = false;
+  
 
   let dialogSettings = {
     "for_modal": "",
@@ -23,13 +29,14 @@
     },
   }
 
-  async function get_tasks_from_md() {
+  async function get_tasks_from_file(arrFiles) {
+    console.log(docDir.finally);
     // открывает проводник для выбора файла
     const selected = await open({
       multiple: true,
       filters: [{
         name: 'Task',
-        extensions: ['md']
+        extensions: arrFiles
       }]
     });
 
@@ -91,60 +98,111 @@ li {
 ul {
   padding-inline-start: 0px;
 }
+
+#singing {
+
+  margin: 0 auto;
+  width: calc(100vw - 25vw);
+  background-color: #3e3e3e;
+  border-radius: 15px;
+  top: calc(100vw - 85vw);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 10px 0px;
+}
+
+.users {
+  width: calc(100vw - 35vw);
+  margin: 5px 5px;
+}
+
+#buttons {
+  width: calc(100vw - 35vw);
+  padding: 5px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sg_but {
+  display: inline-block;
+}
+
 </style>
 
 <div id="main_container">
 
-  <div class="modal_window">
+  {#if !is_sign}
+  
+    <div id="singing">
+      <input type="text" id="user_name" class="users" placeholder="Ник">
+      <input type="password" id="user_password" class="users" placeholder="Пароль">
+      <div id="buttons">
+        <button class="sg_but">Войти</button>
+        <button class="sg_but">Создать аккаунт</button>
+      </div>
+      
+    </div>
+  {:else}
 
-    <Modal
-      bind:showModal
-      bind:typeModal={dialogSettings.for_modal}
-      bind:isJustClosing={dialogSettings.is_just_closing}
-      bind:outArgumetns={dialogSettings.argumetns}
-      on:dialog_out={dialog_out}>
+    <div class="modal_window">
 
-    </Modal>
+      <Modal
+        bind:showModal
+        bind:typeModal={dialogSettings.for_modal}
+        bind:isJustClosing={dialogSettings.is_just_closing}
+        bind:outArgumetns={dialogSettings.argumetns}
+        on:dialog_out={dialog_out}>
 
-  </div>
+      </Modal>
 
-  <div id="tools">
-    <button on:click={get_tasks_from_md}>Ипорт задач из .md файлов</button>
-  </div>
-  <div id="list_tasks">
+    </div>
 
-    <ul>
-        {#each tasks as elem}
-          <li>
-            <Task
-            tasks_text={elem.text}
-            is_done={elem.is_done}
-            task_id={elem.id}
-            on:choose_task={(event) => {
+    <div id="tools">
+      <button on:click={() => get_tasks_from_file(["md"])}>Ипорт задач из .md файлов</button>
+    </div>
+    <div id="list_tasks">
 
-              dialogSettings.for_modal = "edit-task";
-              dialogSettings.is_just_closing = false;
+      <ul>
+          {#each tasks as elem}
+            <li>
+              <Task
+              tasks_text={elem.text}
+              is_done={elem.is_done}
+              task_id={elem.id}
+              on:choose_task={(event) => {
 
-              dialogSettings.argumetns = {
-                "task_id": event.detail.task_id,
-                "tasks_text": event.detail.tasks_text
-              };
+                dialogSettings.for_modal = "edit-task";
+                dialogSettings.is_just_closing = false;
 
-              showModal = true;
-              }}
-            on:change_task_status={(event) => {
-              tasks.find(task => task.id == event.detail.task_id).is_done = event.detail.is_done;
-            }}/> </li> 
-        {/each}
-    </ul>
-    <button 
-      on:click={() => {
-        tasks = tasks.concat({ id: get_last_id(tasks) + 1, text: "Новая задача", is_done: false});
-      }}
-      >+ Добавить задачу</button>
-  </div>
+                dialogSettings.argumetns = {
+                  "task_id": event.detail.task_id,
+                  "tasks_text": event.detail.tasks_text
+                };
+
+                showModal = true;
+                }}
+              on:change_task_status={(event) => {
+                tasks.find(task => task.id == event.detail.task_id).is_done = event.detail.is_done;
+              }}/> </li> 
+          {/each}
+      </ul>
+      <button 
+        on:click={() => {
+          tasks = tasks.concat({ id: get_last_id(tasks) + 1, text: "Новая задача", is_done: false});
+        }}
+        >+ Добавить задачу</button>
+    </div>
+
+  {/if}
 
 </div>
+
+  
 
 
 
