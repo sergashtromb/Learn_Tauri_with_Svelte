@@ -136,7 +136,7 @@ ul {
 
 <div id="main_container">
 
-  {#if !is_sign}
+  <!-- {#if !is_sign}
   
     <div id="singing">
       <input type="text" id="user_name" class="users" placeholder="Ник">
@@ -160,9 +160,10 @@ ul {
 
       </Modal>
 
-    </div>
+    </div> -->
 
     <div id="tools">
+      <button on:click={() => invoke("get_all_tasks")}>Получить все задачи с Базы данных</button>
       <button on:click={() => get_tasks_from_file(["md"])}>Ипорт задач из .md файлов</button>
     </div>
     <div id="list_tasks">
@@ -198,7 +199,7 @@ ul {
         >+ Добавить задачу</button>
     </div>
 
-  {/if}
+  <!-- {/if} -->
 
 </div>
 
