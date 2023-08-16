@@ -4,16 +4,10 @@
 mod tools;
 mod db;
 
-struct User {
-    id: i32,
-    name: String,
-    password: String
-}
-
 fn main() {
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![tools::tasks::parse_file_tasks, console_writeln, db::db::get_all_tasks])
+        .invoke_handler(tauri::generate_handler![tools::tasks::parse_file_tasks, console_writeln, db::db::get_all_tasks, db::db::get_user])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

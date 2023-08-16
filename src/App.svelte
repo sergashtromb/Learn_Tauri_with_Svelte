@@ -14,9 +14,11 @@
   let tasks = [];
   let path = " ";
   let showModal = false;
-  let current_user_id = 0;
+  let current_user = {};
   let is_sign = false;
   
+  let try_name = "";
+  let try_pass = "";
 
   let dialogSettings = {
     "for_modal": "",
@@ -87,6 +89,24 @@
     
   }
 
+  function get_user() {
+    invoke("get_user", 
+    {
+      userName: try_name,
+      userPassword: try_pass
+
+    }).then((result) => {
+      let data = JSON.parse(result);
+      
+      if (data.length > 0) {
+
+        is_sign = true;
+        current_user = data[0];
+
+      };
+    });
+  }
+
 </script>
 
 <style>
@@ -136,13 +156,13 @@ ul {
 
 <div id="main_container">
 
-  <!-- {#if !is_sign}
+  {#if is_sign === false}
   
     <div id="singing">
-      <input type="text" id="user_name" class="users" placeholder="Ник">
-      <input type="password" id="user_password" class="users" placeholder="Пароль">
+      <input type="text" id="user_name" class="users" placeholder="Ник" bind:value={try_name}>
+      <input type="password" id="user_password" class="users" placeholder="Пароль" bind:value={try_pass}>
       <div id="buttons">
-        <button class="sg_but">Войти</button>
+        <button on:click={get_user} class="sg_but">Войти</button>
         <button class="sg_but">Создать аккаунт</button>
       </div>
       
@@ -160,7 +180,7 @@ ul {
 
       </Modal>
 
-    </div> -->
+    </div>
 
     <div id="tools">
       <button on:click={() => invoke("get_all_tasks")}>Получить все задачи с Базы данных</button>
@@ -199,7 +219,7 @@ ul {
         >+ Добавить задачу</button>
     </div>
 
-  <!-- {/if} -->
+  {/if}
 
 </div>
 
