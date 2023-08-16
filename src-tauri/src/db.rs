@@ -8,7 +8,7 @@ pub mod db {
 
     lazy_static::lazy_static! {
         static ref DATABASE_CONNECTION: Arc<Mutex<Client>> = {
-            let client = Client::connect("postgresql://postgres:SHTROMBERGER_2004@localhost/tasks", NoTls).expect("Failed to connect to database");
+            let client = Client::connect("", NoTls).expect("Failed to connect to database");
             Arc::new(Mutex::new(client))
         };
     }
