@@ -1,7 +1,7 @@
 pub mod db {
 
     use lazy_static;
-    use serde_json::Result;
+    //use serde_json::Result;
     use serde_derive::{Deserialize, Serialize};
     use std::sync::{Arc, Mutex};
     use postgres::{Client, NoTls, Error, Row};

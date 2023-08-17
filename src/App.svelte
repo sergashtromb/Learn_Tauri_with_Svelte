@@ -89,8 +89,8 @@
     
   }
 
-  function get_user() {
-    invoke("get_user", 
+  async function get_user() {
+    await invoke("get_user", 
     {
       userName: try_name,
       userPassword: try_pass
