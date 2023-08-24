@@ -1,11 +1,7 @@
 
 pub mod tasks {
 
-    // extern crate serde;
-    // #[macro_use]
-    // extern crate serde_derive;
-    // extern crate serde_json;
-
+    use std::path::Path;
     use regex::Regex;
     use serde_derive::{Deserialize, Serialize};
     use super::file_works;
@@ -13,15 +9,15 @@ pub mod tasks {
     #[derive(Debug, Deserialize, Serialize)]
     pub struct Task {
 
-        id: u16,
-        text: String,
-        is_done: bool
+        pub id: i32,
+        pub text: String,
+        pub is_done: bool
     }
 
     #[tauri::command]
     pub fn parse_file_tasks(path: &str) -> String {
 
-        let text = file_works::get_text_from_file(path);
+        let text = file_works::get_text_from_file(Path::new(path));
 
         let mut result_arr: Vec<Task> = Vec::new();
         // если файл пустой возвращаем пустое значение
@@ -31,7 +27,7 @@ pub mod tasks {
         
         let re = Regex::new(r"-\s\[[\s|\w]\]\s*.*").unwrap();
         // разбиваем на каждую строку
-        let mut i: u16 = 0;
+        let mut i: i32 = 0;
         for elem in text.split("\n") {
             // применяем регулярное выражение для строки
             match re.captures(elem) {
@@ -50,7 +46,7 @@ pub mod tasks {
         return json;
     }
 
-    fn get_task_from_md_format(str: String, index: u16) -> Task {
+    fn get_task_from_md_format(str: String, index: i32) -> Task {
         // создаем объект задачи и присваиваем ему индекс
         let mut result_task: Task = Task { id: index, text: "".to_string(), is_done: true };
 
@@ -75,13 +71,10 @@ pub mod file_works {
     use std::fs::File;
     use std::io::prelude::*;
 
-    pub fn get_text_from_file(path: &str) -> String {
-    
-        let path = Path::new(path);
-        // let display = path.display();
+    pub fn get_text_from_file(path: &Path) -> String {
     
         // Откроем "путь" в режиме "только чтение". Возвращается `io::Result<File>`
-        let mut file = match File::open(&path) {
+        let mut file = match File::open(path) {
     
             Err(why) => {
                 println!("Ошибка: {}", why);
@@ -106,4 +99,57 @@ pub mod file_works {
 
     
 
+}
+
+pub mod settings {
+    
+    use lazy_static;
+    use tauri::api::path::{self, document_dir};
+    use serde_derive::{Deserialize, Serialize};
+    use std::path::PathBuf;
+    use std::fs::File;
+    use std::io::Write;
+    use super::file_works;
+
+
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct Options {
+        pub user_name: String,
+        pub password: String,
+        pub host: String,
+        pub db_name: String
+    }
+
+    lazy_static::lazy_static! {
+        static ref USER_OPTIONS: Options = Options { 
+            user_name: "".to_string(),
+            password: "".to_string(),
+            host: "".to_string(),
+            db_name: "".to_string()
+        };
+    }
+
+    pub fn load_settings() {
+        
+        let mut true_path: PathBuf = document_dir().unwrap();
+
+        true_path.push("ltTaskMessage");
+
+        match true_path.exists() {
+            false => {
+                std::fs::create_dir(true_path.as_path()).expect("Ошибка создания папки");    
+                true_path.push("settings.json");
+
+                let mut file: File = File::create(true_path.as_path()).expect("Ошибка создания файла настроек");
+                
+                let opt = Options {user_name: "".to_string(), password: "".to_string(), host: "".to_string(), db_name: "".to_string()};
+                
+                writeln!(&mut file, "{}", serde_json::to_string(&opt).unwrap()).unwrap();
+
+            },
+            true => {}
+        }
+        
+
+    }
 }

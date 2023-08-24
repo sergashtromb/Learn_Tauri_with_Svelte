@@ -90,21 +90,33 @@
   }
 
   async function get_user() {
-    await invoke("get_user", 
-    {
-      userName: try_name,
-      userPassword: try_pass
+    invoke("get_all_users");
+    // await invoke("get_user", 
+    // {
+    //   userName: try_name,
+    //   userPassword: try_pass
 
-    }).then((result) => {
-      let data = JSON.parse(result);
+    // }).then((result) => {
+    //   console.log("Получаем юзера");
+    //   let data = JSON.parse(result);
       
-      if (data.length > 0) {
+    //   if (data.length > 0) {
 
-        is_sign = true;
-        current_user = data[0];
+    //     is_sign = true;
+    //     current_user = data[0];
 
-      };
-    });
+    //     invoke("get_users_tasks",
+    //     {
+    //       userId: current_user.id,
+
+    //     }).then((result) => {
+    //       console.log("Получаем задачи узера");
+    //       tasks = JSON.parse(result);
+
+    //     });
+
+    //   };
+    // });
   }
 
 </script>

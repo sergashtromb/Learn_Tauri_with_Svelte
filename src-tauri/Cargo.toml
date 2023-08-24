@@ -13,14 +13,16 @@ edition = "2021"
 tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.4", features = [ "path-all", "dialog-all", "shell-open"] }
+tauri = { version = "1.4", features = [ "fs-all", "path-all", "dialog-all", "shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.32.0", features = ["full"] }
 serde_json = "1.0"
 serde_derive = "1.0"
 regex = "1"
 postgres = "0.19.5"
 lazy_static = "1.2.0"
 futures = "0.3"
+tokio-postgres = "0.7.9"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
