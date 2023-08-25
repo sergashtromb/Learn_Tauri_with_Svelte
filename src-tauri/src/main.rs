@@ -6,18 +6,23 @@ use tokio;
 
 mod tools;
 mod db;
+mod commands;
 
 #[tokio:: main]
 async fn main() {
 
-    tools::settings::load_settings();
+    tools::settings::load_global_settings();
 
-    db::db::db_init().await;
+    if tools::settings::GLOBAL_OPTIONS.lock().unwrap().have_db {
+        db::db::db_init().await;
+    }
+    
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             tools::tasks::parse_file_tasks,
-            console_writeln
+            console_writeln,
+            commands::com::check_user,
             ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

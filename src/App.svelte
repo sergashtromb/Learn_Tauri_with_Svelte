@@ -6,6 +6,7 @@
 
   import Task from "./lib/Task.svelte"
   import Modal from "./lib/Modal.svelte";
+  import Registration from "./lib/Registration.svelte";
 
   import { get_last_id } from "./tools/small_operation";
 
@@ -89,36 +90,6 @@
     
   }
 
-  async function get_user() {
-    invoke("get_all_users");
-    // await invoke("get_user", 
-    // {
-    //   userName: try_name,
-    //   userPassword: try_pass
-
-    // }).then((result) => {
-    //   console.log("Получаем юзера");
-    //   let data = JSON.parse(result);
-      
-    //   if (data.length > 0) {
-
-    //     is_sign = true;
-    //     current_user = data[0];
-
-    //     invoke("get_users_tasks",
-    //     {
-    //       userId: current_user.id,
-
-    //     }).then((result) => {
-    //       console.log("Получаем задачи узера");
-    //       tasks = JSON.parse(result);
-
-    //     });
-
-    //   };
-    // });
-  }
-
 </script>
 
 <style>
@@ -131,38 +102,6 @@ ul {
   padding-inline-start: 0px;
 }
 
-#singing {
-
-  margin: 0 auto;
-  width: calc(100vw - 25vw);
-  background-color: #3e3e3e;
-  border-radius: 15px;
-  top: calc(100vw - 85vw);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-  padding: 10px 0px;
-}
-
-.users {
-  width: calc(100vw - 35vw);
-  margin: 5px 5px;
-}
-
-#buttons {
-  width: calc(100vw - 35vw);
-  padding: 5px 0px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.sg_but {
-  display: inline-block;
-}
 
 </style>
 
@@ -170,15 +109,8 @@ ul {
 
   {#if is_sign === false}
   
-    <div id="singing">
-      <input type="text" id="user_name" class="users" placeholder="Ник" bind:value={try_name}>
-      <input type="password" id="user_password" class="users" placeholder="Пароль" bind:value={try_pass}>
-      <div id="buttons">
-        <button on:click={get_user} class="sg_but">Войти</button>
-        <button class="sg_but">Создать аккаунт</button>
-      </div>
-      
-    </div>
+    <Registration/>
+    
   {:else}
 
     <div class="modal_window">

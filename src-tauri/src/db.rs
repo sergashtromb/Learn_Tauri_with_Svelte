@@ -1,15 +1,19 @@
 pub mod db {
 
-    use lazy_static::lazy_static;
-    //use serde_json::Result;
     use serde_derive::{Deserialize, Serialize};
-    use std::{sync::{Arc, Mutex}, fmt::Error};
-    //use postgres::{Client, NoTls, Error, Row};
-    use tokio_postgres::{Client, NoTls, Row, error};
+    use tokio_postgres::{Client, NoTls, Row};
     use tauri::Result;
-    use super::*;
     use crate::tools;
 
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct DataBaseConfig {
+
+        pub user_name: String,
+        pub password: String,
+        pub host: String,
+        pub db_name: String
+
+    }
     pub struct Db {
         pub client: Client,
     }
@@ -64,8 +68,16 @@ pub mod db {
         }
 
         pub async fn connect() -> Result<Db> {
+
+            let user_settings = tools::settings::GLOBAL_OPTIONS.lock().unwrap();
+
             let (client, connection) = tokio_postgres::connect(
-                "host= user= dbname= password=",
+                format!("host={} user={} dbname={} password={}", 
+                        user_settings.db_config.host,
+                        user_settings.db_config.user_name,
+                        user_settings.db_config.db_name,
+                        user_settings.db_config.password
+                    ).as_str(),
                 NoTls,
             )
             .await
@@ -91,6 +103,32 @@ pub mod db {
 
             return rows;
             
+        }
+
+        pub async fn get_user_by_name(&self, user_name: String, user_password: String) -> tools::tasks::User {
+
+            let query = "
+                SELECT id, user_name, user_password
+                FROM users
+                WHERE
+                    user_name = $1 AND user_password = $2
+            ";
+        
+            let rows = self.client.query(query, &[&user_name, &user_password]).await.unwrap();
+
+            if rows.len() == 0 {
+                return tools::tasks::User {
+                    id: -1,
+                    user_name: "".to_string(),
+                    user_password: "".to_string()
+                };
+            }
+
+            return tools::tasks::User {
+                id: rows[0].get::<_, i32>(0),
+                user_name: rows[0].get::<_, String>(1),
+                user_password: rows[0].get::<_, String>(2)
+            };
         }
     }
 

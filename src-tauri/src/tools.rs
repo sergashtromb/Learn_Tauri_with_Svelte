@@ -14,6 +14,13 @@ pub mod tasks {
         pub is_done: bool
     }
 
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct User {
+        pub id: i32,
+        pub user_name: String,
+        pub user_password: String
+    }
+
     #[tauri::command]
     pub fn parse_file_tasks(path: &str) -> String {
 
@@ -104,32 +111,34 @@ pub mod file_works {
 pub mod settings {
     
     use lazy_static;
-    use tauri::api::path::{self, document_dir};
+    use tauri::api::{path::{self, document_dir}, ipc::SerializeOptions};
     use serde_derive::{Deserialize, Serialize};
     use std::path::PathBuf;
     use std::fs::File;
     use std::io::Write;
-    use super::file_works;
-
+    use super::file_works::{self, get_text_from_file};
+    use std::sync::Mutex;
+    use crate::db::db;
 
     #[derive(Debug, Deserialize, Serialize)]
-    pub struct Options {
-        pub user_name: String,
-        pub password: String,
-        pub host: String,
-        pub db_name: String
+    pub struct GlobalOptions {
+        pub have_db: bool,
+        pub db_config: db::DataBaseConfig
     }
 
     lazy_static::lazy_static! {
-        static ref USER_OPTIONS: Options = Options { 
-            user_name: "".to_string(),
-            password: "".to_string(),
-            host: "".to_string(),
-            db_name: "".to_string()
-        };
+        pub static ref  GLOBAL_OPTIONS: Mutex<GlobalOptions> = Mutex::new(GlobalOptions { 
+            have_db: false,
+            db_config: db::DataBaseConfig { 
+                user_name: "".to_string(), 
+                password: "".to_string(), 
+                host: "".to_string(), 
+                db_name: "".to_string()
+            }
+        });
     }
 
-    pub fn load_settings() {
+    pub fn load_global_settings() {
         
         let mut true_path: PathBuf = document_dir().unwrap();
 
@@ -137,17 +146,37 @@ pub mod settings {
 
         match true_path.exists() {
             false => {
+                // Если директории не существует создаем и создаем в ней файл настроек
+                // TO DO: Сделать другой формат файла добавить шифрование
                 std::fs::create_dir(true_path.as_path()).expect("Ошибка создания папки");    
-                true_path.push("settings.json");
+                true_path.push("global_settings.json");
 
                 let mut file: File = File::create(true_path.as_path()).expect("Ошибка создания файла настроек");
                 
-                let opt = Options {user_name: "".to_string(), password: "".to_string(), host: "".to_string(), db_name: "".to_string()};
+                let opt = GlobalOptions {
+                    have_db: false,
+                    db_config: db::DataBaseConfig { 
+                        user_name: "".to_string(), 
+                        password: "".to_string(), 
+                        host: "".to_string(), 
+                        db_name: "".to_string()
+                    }
+                };
                 
                 writeln!(&mut file, "{}", serde_json::to_string(&opt).unwrap()).unwrap();
 
             },
-            true => {}
+            true => {
+
+                true_path.push("global_settings.json");
+
+                let json_str = get_text_from_file(&true_path.as_path());
+                
+                *(GLOBAL_OPTIONS.lock().unwrap()) = {
+                    serde_json::from_str::<GlobalOptions>(json_str.as_str()).unwrap()
+                }
+                
+            }
         }
         
 
