@@ -48,13 +48,8 @@ function create_user() {
         const user = JSON.parse(result);
 
         if(user.id !== -1) {
-
-            console.log("Такой пользователь существует " + user);
-
             change_disabled_button("sg_but", false, "Class");
-
             return;
-
         }
 
         invoke("registration_user", {

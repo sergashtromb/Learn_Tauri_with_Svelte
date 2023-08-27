@@ -1,0 +1,44 @@
+<script>
+    import Task from "./Task.svelte";
+
+    import { get_last_id } from "../tools/small_operation";
+
+    let tasks = [];
+    let path = " ";
+    // export let showModal = false;
+
+    // export let dialogSettings = {
+    //     "for_modal": "",
+    //     "is_just_closing": false,
+    //     "argumetns": {},
+    //     "clear_param": function() { 
+    //     this.for_modal = "";
+    //     this.is_just_closing = false;
+    //     this.argumetns = {};
+    //     },
+    // }
+
+</script>
+
+<style>
+
+/* #content {
+    margin-left: 160px;
+    left: calc(100vw - 85vw);
+}
+
+li {
+  list-style-type: none;
+}
+
+ul {
+  padding-inline-start: 0px;
+} */
+
+</style>
+
+<div id="content">
+
+    
+
+</div>

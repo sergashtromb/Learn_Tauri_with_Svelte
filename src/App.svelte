@@ -4,9 +4,10 @@
   import { open } from '@tauri-apps/api/dialog';
   import { documentDir } from '@tauri-apps/api/path';
 
-  import Task from "./lib/Task.svelte"
   import Modal from "./lib/Modal.svelte";
   import Registration from "./lib/Registration.svelte";
+  import MainMenu from "./lib/MainMenu.svelte";
+  import Content from "./lib/Content.svelte";
 
   import { get_last_id } from "./tools/small_operation";
 
@@ -17,9 +18,7 @@
   let showModal = false;
   let current_user = {};
   let is_sign = false;
-  
-  let try_name = "";
-  let try_pass = "";
+
 
   let dialogSettings = {
     "for_modal": "",
@@ -94,15 +93,6 @@
 
 <style>
 
-li {
-  list-style-type: none;
-}
-
-ul {
-  padding-inline-start: 0px;
-}
-
-
 </style>
 
 <div id="main_container">
@@ -132,42 +122,8 @@ ul {
 
     </div>
 
-    <div id="tools">
-      <button on:click={() => invoke("get_all_tasks")}>Получить все задачи с Базы данных</button>
-      <button on:click={() => get_tasks_from_file(["md"])}>Ипорт задач из .md файлов</button>
-    </div>
-    <div id="list_tasks">
-
-      <ul>
-          {#each tasks as elem}
-            <li>
-              <Task
-              tasks_text={elem.text}
-              is_done={elem.is_done}
-              task_id={elem.id}
-              on:choose_task={(event) => {
-
-                dialogSettings.for_modal = "edit-task";
-                dialogSettings.is_just_closing = false;
-
-                dialogSettings.argumetns = {
-                  "task_id": event.detail.task_id,
-                  "tasks_text": event.detail.tasks_text
-                };
-
-                showModal = true;
-                }}
-              on:change_task_status={(event) => {
-                tasks.find(task => task.id == event.detail.task_id).is_done = event.detail.is_done;
-              }}/> </li> 
-          {/each}
-      </ul>
-      <button 
-        on:click={() => {
-          tasks = tasks.concat({ id: get_last_id(tasks) + 1, text: "Новая задача", is_done: false});
-        }}
-        >+ Добавить задачу</button>
-    </div>
+    <MainMenu/>
+    <Content/>
 
   {/if}
 
