@@ -22,7 +22,9 @@ async fn main() {
         .invoke_handler(tauri::generate_handler![
             tools::tasks::parse_file_tasks,
             console_writeln,
-            commands::com::check_user,
+            commands::com::check_user_by_all,
+            commands::com::check_user_by_name,
+            commands::com::registration_user,
             ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

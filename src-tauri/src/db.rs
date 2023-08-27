@@ -105,7 +105,7 @@ pub mod db {
             
         }
 
-        pub async fn get_user_by_name(&self, user_name: String, user_password: String) -> tools::tasks::User {
+        pub async fn get_user_by_all(&self, user_name: String, user_password: String) -> tools::tasks::User {
 
             let query = "
                 SELECT user_id, user_name, user_password
@@ -129,6 +129,46 @@ pub mod db {
                 user_name: rows[0].get::<_, String>(1),
                 user_password: rows[0].get::<_, String>(2)
             };
+        }
+
+        pub async fn get_user_by_name(&self, user_name: String) -> tools::tasks::User {
+
+            let query = "
+                SELECT user_id, user_name, user_password
+                FROM users
+                WHERE
+                    user_name = $1
+            ";
+        
+            let rows = self.client.query(query, &[&user_name]).await.unwrap();
+
+            if rows.len() == 0 {
+                return tools::tasks::User {
+                    id: -1,
+                    user_name: "".to_string(),
+                    user_password: "".to_string()
+                };
+            }
+
+            return tools::tasks::User {
+                id: rows[0].get::<_, i32>(0),
+                user_name: rows[0].get::<_, String>(1),
+                user_password: rows[0].get::<_, String>(2)
+            };
+
+
+        }
+
+        pub async fn create_user(&self, user_name: String, user_password: String) -> i32 {
+
+            let query ="
+            INSERT INTO users (user_name, user_password)
+            VALUES ($1, $2) RETURNING user_id
+            ";
+
+            let row = self.client.query(query, &[&user_name, &user_password]).await.unwrap();
+
+            return row[0].get::<_, i32>(0);
         }
     }
 

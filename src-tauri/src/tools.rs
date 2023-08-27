@@ -14,7 +14,7 @@ pub mod tasks {
         pub is_done: bool
     }
 
-    #[derive(Debug, Deserialize, Serialize)]
+    #[derive(Debug, Deserialize, Serialize, Clone)]
     pub struct User {
         pub id: i32,
         pub user_name: String,

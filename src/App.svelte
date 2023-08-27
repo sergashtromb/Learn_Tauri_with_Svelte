@@ -113,7 +113,8 @@ ul {
 
       is_sign = true;
       current_user = event.detail.user; 
-      
+      console.log(current_user.id);
+
     }}/>
     
   {:else}

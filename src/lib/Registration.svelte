@@ -17,15 +17,15 @@ function get_user() {
     
     change_disabled_button("sg_but", true, "Class");
 
-    invoke("check_user", {
-        userName: try_name,
+    invoke("check_user_by_all", {
+        userName: try_name.trim(),
         userPassword: try_pass
     }
     ).then((result) => {
         const user = JSON.parse(result);
 
         if (user.id === -1) {
-            console.log("dont");
+            
 
             change_disabled_button("sg_but", false, "Class");
 
@@ -36,7 +36,40 @@ function get_user() {
 
     });
     
-    
+}
+
+function create_user() {
+
+    change_disabled_button("sg_but", true, "Class");
+
+    invoke("check_user_by_name", {
+        userName: try_name.trim()
+    }).then((result) => {
+        const user = JSON.parse(result);
+
+        if(user.id !== -1) {
+
+            console.log("Такой пользователь существует " + user);
+
+            change_disabled_button("sg_but", false, "Class");
+
+            return;
+
+        }
+
+        invoke("registration_user", {
+            userName: try_name.trim(),
+            userPassword: try_pass
+        }).then((result) => {
+
+            const new_user = JSON.parse(result);
+
+            dispatch("log_in", {user: new_user});
+            
+        });
+    });
+
+
 }
 
 </script>
@@ -83,7 +116,7 @@ function get_user() {
     <input type="password" id="user_password" class="users" placeholder="Пароль" bind:value={try_pass}>
     <div id="buttons">
       <button on:click={get_user} class="sg_but" id="sg_sub">Войти</button>
-      <button class="sg_but" id="sg_reg">Создать аккаунт</button>
+      <button on:click={create_user} class="sg_but" id="sg_reg">Создать аккаунт</button>
     </div>
     
 </div>
