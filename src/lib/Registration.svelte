@@ -20,7 +20,8 @@ function get_user() {
     invoke("check_user", {
         userName: try_name,
         userPassword: try_pass
-    }).then((result) => {
+    }
+    ).then((result) => {
         const user = JSON.parse(result);
 
         if (user.id === -1) {
@@ -31,6 +32,8 @@ function get_user() {
             return;
         }
         
+        dispatch("log_in", {user: user});
+
     });
     
     

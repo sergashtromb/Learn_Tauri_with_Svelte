@@ -109,7 +109,12 @@ ul {
 
   {#if is_sign === false}
   
-    <Registration/>
+    <Registration on:log_in={(event) => {
+
+      is_sign = true;
+      current_user = event.detail.user; 
+      
+    }}/>
     
   {:else}
 
