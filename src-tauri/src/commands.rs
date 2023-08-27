@@ -10,7 +10,7 @@ pub mod com {
         let data_base = db::Db::connect().await.unwrap();
         let new_user = data_base.get_user_by_name(user_name, user_password).await;
         let result = serde_json::to_string(&new_user).unwrap();
-
+        
         return result;
     }
 }

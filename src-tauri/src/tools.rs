@@ -117,7 +117,8 @@ pub mod settings {
     use std::fs::File;
     use std::io::Write;
     use super::file_works::{self, get_text_from_file};
-    use std::sync::Mutex;
+    // use std::sync::Mutex;
+    use futures::lock::Mutex;
     use crate::db::db;
 
     #[derive(Debug, Deserialize, Serialize)]
@@ -138,7 +139,7 @@ pub mod settings {
         });
     }
 
-    pub fn load_global_settings() {
+    pub async fn load_global_settings() {
         
         let mut true_path: PathBuf = document_dir().unwrap();
 
@@ -172,13 +173,11 @@ pub mod settings {
 
                 let json_str = get_text_from_file(&true_path.as_path());
                 
-                *(GLOBAL_OPTIONS.lock().unwrap()) = {
+                *(GLOBAL_OPTIONS.lock().await) = {
                     serde_json::from_str::<GlobalOptions>(json_str.as_str()).unwrap()
-                }
-                
+                }       
             }
         }
-        
 
     }
 }

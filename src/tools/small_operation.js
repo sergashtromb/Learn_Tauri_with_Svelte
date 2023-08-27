@@ -12,3 +12,19 @@ export function get_last_id(tasks) {
     return id;
 
 }
+
+export function change_disabled_button(names, disabled, type) {
+
+    if(type === 'Id') {
+        // @ts-ignore
+        document.getElementById(names).disabled = disabled;
+    } else if (type === 'Class') {
+        // @ts-ignore
+        let arr = document.getElementsByClassName(names);
+        for(let i = 0; i < arr.length; i++) {
+            // @ts-ignore
+            arr[i].disabled = disabled;
+        }
+    }
+    
+}

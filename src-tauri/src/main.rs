@@ -11,9 +11,9 @@ mod commands;
 #[tokio:: main]
 async fn main() {
 
-    tools::settings::load_global_settings();
+    tools::settings::load_global_settings().await;
 
-    if tools::settings::GLOBAL_OPTIONS.lock().unwrap().have_db {
+    if tools::settings::GLOBAL_OPTIONS.lock().await.have_db {
         db::db::db_init().await;
     }
     

@@ -3,14 +3,36 @@
 
 import { invoke } from "@tauri-apps/api/tauri"
 import { createEventDispatcher } from "svelte";
+import { change_disabled_button } from "../tools/small_operation";
+
 
 const dispatch = createEventDispatcher();
 
 let try_name = "";
 let try_pass = "";
 
-async function get_user() {
-    invoke("get_all_users");
+
+
+function get_user() {
+    
+    change_disabled_button("sg_but", true, "Class");
+
+    invoke("check_user", {
+        userName: try_name,
+        userPassword: try_pass
+    }).then((result) => {
+        const user = JSON.parse(result);
+
+        if (user.id === -1) {
+            console.log("dont");
+
+            change_disabled_button("sg_but", false, "Class");
+
+            return;
+        }
+        
+    });
+    
     
 }
 
@@ -57,8 +79,8 @@ async function get_user() {
     <input type="text" id="user_name" class="users" placeholder="Ник" bind:value={try_name}>
     <input type="password" id="user_password" class="users" placeholder="Пароль" bind:value={try_pass}>
     <div id="buttons">
-      <button on:click={get_user} class="sg_but">Войти</button>
-      <button class="sg_but">Создать аккаунт</button>
+      <button on:click={get_user} class="sg_but" id="sg_sub">Войти</button>
+      <button class="sg_but" id="sg_reg">Создать аккаунт</button>
     </div>
     
 </div>

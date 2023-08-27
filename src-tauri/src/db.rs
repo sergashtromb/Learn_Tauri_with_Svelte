@@ -69,7 +69,7 @@ pub mod db {
 
         pub async fn connect() -> Result<Db> {
 
-            let user_settings = tools::settings::GLOBAL_OPTIONS.lock().unwrap();
+            let user_settings = tools::settings::GLOBAL_OPTIONS.lock().await;
 
             let (client, connection) = tokio_postgres::connect(
                 format!("host={} user={} dbname={} password={}", 
@@ -108,7 +108,7 @@ pub mod db {
         pub async fn get_user_by_name(&self, user_name: String, user_password: String) -> tools::tasks::User {
 
             let query = "
-                SELECT id, user_name, user_password
+                SELECT user_id, user_name, user_password
                 FROM users
                 WHERE
                     user_name = $1 AND user_password = $2
