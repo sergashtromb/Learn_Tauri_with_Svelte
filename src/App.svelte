@@ -4,10 +4,10 @@
   import { open } from '@tauri-apps/api/dialog';
   import { documentDir } from '@tauri-apps/api/path';
 
-  import Modal from "./lib/Modal.svelte";
-  import Registration from "./lib/Registration.svelte";
-  import MainMenu from "./lib/MainMenu.svelte";
-  import Content from "./lib/Content.svelte";
+  import Modal from "./lib/MainComponent/Modal.svelte";
+  import Registration from "./lib/MainComponent/Registration.svelte";
+  import MainMenu from "./lib/MainComponent/MainMenu.svelte";
+  import Content from "./lib/MainComponent/Content.svelte";
 
   import { get_last_id } from "./tools/small_operation";
 
@@ -102,25 +102,19 @@
     <Registration on:log_in={(event) => {
 
       is_sign = true;
-      current_user = event.detail.user; 
-      console.log(current_user.id);
+      current_user = event.detail.user;
 
     }}/>
     
   {:else}
 
-    <div class="modal_window">
-
-      <Modal
-        bind:showModal
-        bind:typeModal={dialogSettings.for_modal}
-        bind:isJustClosing={dialogSettings.is_just_closing}
-        bind:outArgumetns={dialogSettings.argumetns}
-        on:dialog_out={dialog_out}>
-
-      </Modal>
-
-    </div>
+    <Modal
+      bind:showModal
+      bind:typeModal={dialogSettings.for_modal}
+      bind:isJustClosing={dialogSettings.is_just_closing}
+      bind:outArgumetns={dialogSettings.argumetns}
+      on:dialog_out={dialog_out}>
+    </Modal>
 
     <MainMenu/>
     <Content/>

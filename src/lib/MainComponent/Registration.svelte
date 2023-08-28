@@ -3,7 +3,7 @@
 
 import { invoke } from "@tauri-apps/api/tauri"
 import { createEventDispatcher } from "svelte";
-import { change_disabled_button } from "../tools/small_operation";
+import { change_disabled_button } from "../../tools/small_operation";
 
 
 const dispatch = createEventDispatcher();

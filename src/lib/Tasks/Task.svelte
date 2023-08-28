@@ -1,7 +1,7 @@
 <script>
     import { invoke } from "@tauri-apps/api/tauri";
     import { createEventDispatcher } from "svelte";
-    import { clickOutside } from "../tools/event";
+    import { clickOutside } from "../../tools/event";
 
     export let tasks_text = "Новая задача";
     export let is_done = false;

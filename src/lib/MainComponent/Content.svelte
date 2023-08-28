@@ -1,7 +1,7 @@
 <script>
-    import Task from "./Task.svelte";
+    import Task from "../Tasks/Task.svelte";
 
-    import { get_last_id } from "../tools/small_operation";
+    import { get_last_id } from "../../tools/small_operation";
 
     let tasks = [];
     let path = " ";
