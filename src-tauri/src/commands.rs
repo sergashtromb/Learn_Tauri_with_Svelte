@@ -55,4 +55,18 @@ pub mod com {
         
         return "".to_string();
     }
+
+    #[tauri::command]
+    pub async fn get_tasks(user_id: i32) -> String {
+
+        if settings::GLOBAL_OPTIONS.lock().await.have_db {
+
+            let db = db::Db::connect().await.unwrap();
+            let tasks = db.get_tasks_by_user_id(user_id).await;
+            let result = serde_json::to_string(&tasks).unwrap();
+
+            return result;
+        }
+        return "".to_string();
+    }
 }

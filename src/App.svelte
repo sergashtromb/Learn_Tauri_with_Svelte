@@ -117,7 +117,7 @@
     </Modal>
 
     <MainMenu/>
-    <Content/>
+    <Content current_user={current_user}/>
 
   {/if}
 

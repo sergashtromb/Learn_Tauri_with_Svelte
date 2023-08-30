@@ -1,8 +1,8 @@
 <script>
-    import Task from "../Tasks/Task.svelte";
+    import TasksList from "../Tasks/TasksList.svelte";
 
     import { get_last_id } from "../../tools/small_operation";
-
+    export let current_user = {};
     let tasks = [];
     let path = " ";
     // export let showModal = false;
@@ -22,23 +22,19 @@
 
 <style>
 
-/* #content {
+#content {
     margin-left: 160px;
     left: calc(100vw - 85vw);
 }
 
-li {
-  list-style-type: none;
-}
-
-ul {
-  padding-inline-start: 0px;
-} */
 
 </style>
 
 <div id="content">
 
-    
+  <TasksList
+    current_user={current_user}
+    on:choose_task
+  />
 
 </div>

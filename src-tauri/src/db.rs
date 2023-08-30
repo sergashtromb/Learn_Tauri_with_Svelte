@@ -170,6 +170,30 @@ pub mod db {
 
             return row[0].get::<_, i32>(0);
         }
+
+        pub async fn get_tasks_by_user_id(&self, user_id: i32) -> Vec<tools::tasks::Task> {
+
+            let query = "
+                SELECT task_id, task_text, is_done
+                FROM tasks
+                WHERE
+                    author_id = $1
+            ";
+
+            let rows = self.client.query(query, &[&user_id]).await.unwrap();
+
+            let mut result_vec: Vec<tools::tasks::Task> = vec![];
+
+            for row in rows {
+                result_vec.push(tools::tasks::Task {
+                    id: row.get::<_, i32>(0),
+                    text: row.get::<_, String>(0),
+                    is_done: row.get::<_, bool>(2)
+                });
+            }
+
+            return result_vec;
+        }
     }
 
     #[derive(Debug, Deserialize, Serialize)]

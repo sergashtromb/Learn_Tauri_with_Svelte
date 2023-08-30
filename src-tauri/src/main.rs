@@ -25,6 +25,7 @@ async fn main() {
             commands::com::check_user_by_all,
             commands::com::check_user_by_name,
             commands::com::registration_user,
+            commands::com::get_tasks,
             ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
