@@ -174,7 +174,7 @@ pub mod db {
         pub async fn get_tasks_by_user_id(&self, user_id: i32) -> Vec<tools::tasks::Task> {
 
             let query = "
-                SELECT task_id, task_text, is_done
+                SELECT task_id, task_text, is_done, pg_sleep(5)
                 FROM tasks
                 WHERE
                     author_id = $1
@@ -187,7 +187,7 @@ pub mod db {
             for row in rows {
                 result_vec.push(tools::tasks::Task {
                     id: row.get::<_, i32>(0),
-                    text: row.get::<_, String>(0),
+                    text: row.get::<_, String>(1),
                     is_done: row.get::<_, bool>(2)
                 });
             }

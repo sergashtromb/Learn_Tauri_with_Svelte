@@ -7,16 +7,17 @@
     export let current_user = {};
     let tasks = [];
 
-    onMount(() => {
-        // @ts-ignore
-        tasks = get_tasks(current_user.id);
-    });
+    // onMount(() => {
+    //     // @ts-ignore
+    //     tasks = get_tasks(current_user.id);
+    // });
 
     async function get_tasks(user_id) {
-        invoke("get_tasks", {userId: user_id}).then((result) => {
-            return JSON.parse(result);
+        await invoke("get_tasks", {userId: user_id}).then((result) => {
+            tasks = JSON.parse(result);
         });
     }
+
 
 </script>
 
@@ -34,21 +35,24 @@ ul {
 
 <div id="tasks_list">
 
-    <ul>
+    {#await get_tasks(current_user.id)}
+        <h3>Подождите....</h3>
+    {:then value} 
+        <ul>
+            {#each tasks as elem}
+                <li>
+                    <Task
+                        tasks_text = {elem.text}
+                        is_done = {elem.is_done}
+                        task_id = {elem.id}
+                        on:choose_task
+                        on:change_task_status
+                    />
+                </li>
+            {/each}
 
-        {#each tasks as elem}
-            <li>
-                <Task
-                    tasks_text = {elem.text}
-                    is_done = {elem.is_done}
-                    task_id = {elem.id}
-                    on:choose_task
-                    on:change_task_status
-                />
-            </li>
-        {/each}
-
-    </ul>
+        </ul>
+    {/await}
 
 </div>
 
