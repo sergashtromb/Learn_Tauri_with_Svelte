@@ -6,6 +6,7 @@ pub mod com {
     use crate::db::db;
     use crate::tools::tasks;
     use crate::tools::settings;
+    use crate::tools::operations;
 
     #[tauri::command]
     pub async fn check_user_by_all(user_name: String, user_password: String) -> Result<String, String> {
@@ -66,7 +67,7 @@ pub mod com {
 
             match conn {
                 Ok(data_base) => {
-                    
+
                     let new_user = tasks::User {
                         id: data_base.create_user(user_name.clone(), user_password.clone()).await,
                         user_name: user_name,
@@ -79,6 +80,14 @@ pub mod com {
 
                 }
                 Err(why) => {
+
+                    let oper = operations::Operation {
+                        type_operation: operations::TypeOperation::CreateUser,
+                        task: tasks::Task { id: -1, text: "".to_string(), is_done: false },
+                        user: db::User { id: -1, name: user_name, password: user_password }
+                    };
+                    operations::add_operation(oper).await;
+
                     return Err(why.to_string());
                 }
             }
@@ -111,11 +120,4 @@ pub mod com {
         Ok("".to_string())
     }
 
-    // #[tauri::command]
-    // pub async fn get_runtime() {
-    //     let metrics = Handle::current().metrics();
-
-    //     let n = metrics.active_tasks_count();
-    //     println!("runtime - {}", n);
-    // }
 }

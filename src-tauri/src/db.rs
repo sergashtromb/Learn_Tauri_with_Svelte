@@ -82,7 +82,7 @@ pub mod db {
             )
             .await
             .map_err(|e| {
-                eprintln!("connection error: {}", e);
+                //eprintln!("connection error: {}", e);
                 e
             })?;
 
@@ -201,9 +201,9 @@ pub mod db {
 
     #[derive(Debug, Deserialize, Serialize)]
     pub struct User {
-        id: i32,
-        name: String,
-        password: String
+        pub id: i32,
+        pub name: String,
+        pub password: String
     }
 
     pub async fn db_init() {
