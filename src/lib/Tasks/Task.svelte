@@ -48,6 +48,12 @@ div  {
     transform: translateY(-0.075em);
 }
 
+input {
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
 </style>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

@@ -181,3 +181,36 @@ pub mod settings {
 
     }
 }
+
+pub mod operations {
+
+    use tokio::sync::Mutex;
+    use lazy_static;
+    // use futures::lock::Mutex;
+    use serde_derive::{Deserialize, Serialize};
+
+    use crate::db::db;
+    use crate::tools;
+    pub enum TypeOperation {
+        CreateTask,
+        CreateUser,
+        ChangeTask,
+        ChangeUser
+    }
+
+    pub struct Operation {
+        type_operation: TypeOperation,
+        task: tools::tasks::Task,
+        user: db::User
+    }
+
+    // TODO
+    lazy_static::lazy_static!(
+        pub static ref QUEUE_OPERATIONS: Mutex<Vec<Operation>> = Mutex::new(vec![]);
+    );
+
+    pub async fn add_operation(oper: Operation) {
+        let mut var = QUEUE_OPERATIONS.lock().await;
+        var.push(oper);
+    }
+}

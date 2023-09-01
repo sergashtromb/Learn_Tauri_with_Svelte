@@ -1,4 +1,5 @@
 <script>
+    import { invoke } from "@tauri-apps/api/tauri";
 
 </script>
 
@@ -26,7 +27,9 @@
 
 <div id="tools">
 
-    <button>Получить все задачи с Базы данных</button>
+    <button on:click={() => {
+        invoke("get_runtime");
+    }}>Получить все задачи с Базы данных</button>
     <button>Ипорт задач из .md файлов</button>
     
 </div>

@@ -1,8 +1,8 @@
 pub mod db {
 
     use serde_derive::{Deserialize, Serialize};
-    use tokio_postgres::{Client, NoTls, Row};
-    use tauri::Result;
+    use tokio_postgres::{Client, NoTls, Row, Error};
+    use std::result::{Result};
     use crate::tools;
 
     #[derive(Debug, Deserialize, Serialize)]
@@ -67,7 +67,7 @@ pub mod db {
 
         }
 
-        pub async fn connect() -> Result<Db> {
+        pub async fn connect() -> Result<Db, Error> {
 
             let user_settings = tools::settings::GLOBAL_OPTIONS.lock().await;
 
@@ -81,7 +81,10 @@ pub mod db {
                 NoTls,
             )
             .await
-            .unwrap();
+            .map_err(|e| {
+                eprintln!("connection error: {}", e);
+                e
+            })?;
 
             tokio::spawn(async move {
                 if let Err(e) = connection.await {
@@ -174,7 +177,7 @@ pub mod db {
         pub async fn get_tasks_by_user_id(&self, user_id: i32) -> Vec<tools::tasks::Task> {
 
             let query = "
-                SELECT task_id, task_text, is_done, pg_sleep(5)
+                SELECT task_id, task_text, is_done
                 FROM tasks
                 WHERE
                     author_id = $1

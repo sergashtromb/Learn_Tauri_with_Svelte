@@ -10,7 +10,7 @@ mod commands;
 
 #[tokio:: main]
 async fn main() {
-
+    
     tools::settings::load_global_settings().await;
 
     if tools::settings::GLOBAL_OPTIONS.lock().await.have_db {
