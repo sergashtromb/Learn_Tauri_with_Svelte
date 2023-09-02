@@ -84,10 +84,11 @@
 	on:click|self={click_with_dialog} >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div id="content">
-
+		<slot name="cont"/>
 		<!-- svelte-ignore a11y-autofocus -->
 		<div id="buttons_container">
 
+			<slot name="butt"/>
 
 			<button
 				id="button_closing"
