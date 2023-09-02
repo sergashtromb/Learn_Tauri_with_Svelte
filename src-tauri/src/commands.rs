@@ -81,12 +81,12 @@ pub mod com {
                 }
                 Err(why) => {
 
-                    let oper = operations::Operation {
-                        type_operation: operations::TypeOperation::CreateUser,
-                        task: tasks::Task { id: -1, text: "".to_string(), is_done: false },
-                        user: db::User { id: -1, name: user_name, password: user_password }
-                    };
-                    operations::add_operation(oper).await;
+                    // let oper = operations::Operation {
+                    //     type_operation: operations::TypeOperation::CreateUser,
+                    //     task: tasks::Task { id: -1, text: "".to_string(), is_done: false },
+                    //     user: db::User { id: -1, name: user_name, password: user_password }
+                    // };
+                    // operations::add_operation(oper).await;
 
                     return Err(why.to_string());
                 }
@@ -120,4 +120,66 @@ pub mod com {
         Ok("".to_string())
     }
 
+    #[tauri::command]
+    pub async fn add_task(user_id: i32, task_text: String, is_done: bool, last_id: i32) -> Result<String, String> {
+        if settings::GLOBAL_OPTIONS.lock().await.have_db {
+
+            let conn = db::Db::connect().await;
+
+            match conn {
+                Ok(data_base) => {
+                    let task_id = data_base.create_task(user_id, task_text.clone(), is_done).await;
+                    let task = tasks::Task { id: task_id, text: task_text, is_done: is_done};
+                    let result = serde_json::to_string(&task).unwrap();
+
+                    return Ok(result);
+                }
+                Err(why) => {
+
+                    let oper = operations::Operation {
+                        type_operation: operations::TypeOperation::CreateTask,
+                        task: tasks::Task { id: last_id, text: task_text, is_done: is_done },
+                        user: tasks::User { id: user_id, user_name: "".to_string(), user_password: "".to_string() }
+                    };
+                    operations::add_operation(oper).await;
+
+                    return Err(why.to_string());
+                }
+            }
+
+        }
+
+        Ok("".to_string())
+    }
+
+    #[tauri::command]
+    pub async fn change_task(user_id: i32, task_text: String, is_done: bool, task_id: i32) -> Result<String, String> {
+
+        if settings::GLOBAL_OPTIONS.lock().await.have_db {
+
+            let conn = db::Db::connect().await;
+
+            match conn {
+                Ok(data_base) => {
+                    data_base.update_task(user_id, task_text, is_done, task_id).await;
+                    return Ok("Успешно!".to_string());
+                }
+                Err(why) => {
+
+                    let oper = operations::Operation {
+                        type_operation: operations::TypeOperation::ChangeTask,
+                        task: tasks::Task { id: task_id, text: task_text, is_done: is_done },
+                        user: tasks::User { id: user_id, user_name: "".to_string(), user_password: "".to_string() }
+                    };
+                    operations::add_operation(oper).await;
+
+                    return Err(why.to_string());
+                }
+            }
+
+        }
+
+        Ok("".to_string())
+
+    }
 }

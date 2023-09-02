@@ -4,9 +4,9 @@
     const dispatch = createEventDispatcher();
 
 	export let showModal; // boolean
-	export let typeModal; // string
+	// export let typeModal; // string
 	export let isJustClosing; // boolean
-	export let outArgumetns; // объект который принимает внешние аргументы как данные при вызове модального окна
+	// export let outArgumetns; // объект который принимает внешние аргументы как данные при вызове модального окна
 
 
 	let dialog; // HTMLDialogElement
@@ -15,13 +15,10 @@
 
 	function dialog_close() {
 
-		dispatch("dialog_out", {
-			saveData: outArgumetns,
-			type: typeModal
-		});
+		dispatch("dialog_out");
 
 		showModal = false;
-		typeModal = "";
+	
 	}
 
 	function click_with_dialog() {
@@ -77,13 +74,6 @@
 		float: right;
 	}
 
-	hr {
-		width: 100%;
-		margin: 20px 0px;
-	}
-	#tasks_text {
-		width: 100%;
-	}
 </style>
 
 
@@ -94,32 +84,10 @@
 	on:click|self={click_with_dialog} >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div id="content">
-		{#if typeModal === "message"}
-			<slot name="modal_header" />
-			<hr />
-			<slot name="modal_content" />
-			<hr />
-		{:else if typeModal === "edit-task"}
-			<h2>Редактирование задачи</h2>
-			<hr />
-			<input
-				id="tasks_text"
-				type="text"
-				bind:value={outArgumetns.tasks_text}>
-			<hr />
-		{/if}
+
 		<!-- svelte-ignore a11y-autofocus -->
 		<div id="buttons_container">
 
-			{#if typeModal === "edit-task"}
-				<button
-					id="button_save"
-					on:click={() => {
-						dialog.close();
-					}}>
-					Сохранить задачу
-				</button>
-			{/if}
 
 			<button
 				id="button_closing"

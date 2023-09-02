@@ -34,7 +34,7 @@ function get_user() {
         
         dispatch("log_in", {user: user});
 
-    });
+    }).catch((err) => console.log(err));
     
 }
 
@@ -61,8 +61,9 @@ function create_user() {
 
             dispatch("log_in", {user: new_user});
             
-        });
-    });
+        }).catch((err) => console.log(err));
+
+    }).catch((err) => console.log(err));
 
 
 }

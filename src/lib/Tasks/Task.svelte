@@ -1,4 +1,7 @@
 <script>
+
+    import Modal from "../MainComponent/Modal.svelte";
+
     import { invoke } from "@tauri-apps/api/tauri";
     import { createEventDispatcher } from "svelte";
     import { clickOutside } from "../../tools/event";
@@ -6,7 +9,7 @@
     export let tasks_text = "Новая задача";
     export let is_done = false;
     export let task_id = 0;
-    
+    let showModal = false;
 
     
 
@@ -21,10 +24,7 @@
     }
 
     function choose_task() {
-        dispatch('choose_task', {
-            task_id: task_id,
-            tasks_text: tasks_text
-        })
+        showModal = true;
     }
 
 </script>
@@ -55,6 +55,11 @@ input {
 }
 
 </style>
+
+
+{#if showModal}
+    <Modal showModal={showModal} isJustClosing={true} on:dialog_out={() => {showModal = false}}/>    
+{/if}
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->

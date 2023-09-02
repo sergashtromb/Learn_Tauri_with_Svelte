@@ -201,7 +201,7 @@ pub mod operations {
     pub struct Operation {
         pub type_operation: TypeOperation,
         pub task: tools::tasks::Task,
-        pub user: db::User
+        pub user: tools::tasks::User
     }
 
     // TODO

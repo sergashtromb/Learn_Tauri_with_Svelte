@@ -197,14 +197,37 @@ pub mod db {
 
             return result_vec;
         }
+
+        pub async fn create_task(&self, user_id: i32, task_text: String, is_done: bool) -> i32 {
+
+            let query = "
+                INSERT INTO tasks (task_text, is_done, author_id)
+                VALUES 
+                (
+                    $1,
+                    $2,
+                    $3
+                ) RETURNING task_id
+            ";
+
+            let row = self.client.query(query, &[&task_text, &is_done, &user_id]).await.unwrap();
+
+            return row[0].get::<_, i32>(0);
+        }
+
+        pub async fn update_task(&self, user_id: i32, task_text: String, is_done: bool, task_id: i32) {
+            let query = "
+                UPDATE tasks
+                SET task_text = $1,
+                    is_done = $2
+                WHERE
+                    author_id = $3 AND task_id = $4
+            ";
+
+            self.client.query(query, &[&task_text, &is_done, &user_id, &task_id]).await.unwrap();
+        }
     }
 
-    #[derive(Debug, Deserialize, Serialize)]
-    pub struct User {
-        pub id: i32,
-        pub name: String,
-        pub password: String
-    }
 
     pub async fn db_init() {
 
@@ -214,7 +237,6 @@ pub mod db {
     }
 
 }
-        
-    
+           
     
    

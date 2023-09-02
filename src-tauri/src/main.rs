@@ -13,9 +13,9 @@ async fn main() {
     
     tools::settings::load_global_settings().await;
 
-    // if tools::settings::GLOBAL_OPTIONS.lock().await.have_db {
-    //     db::db::db_init().await;
-    // }
+    if tools::settings::GLOBAL_OPTIONS.lock().await.have_db {
+        db::db::db_init().await;
+    }
     
 
     tauri::Builder::default()
@@ -26,6 +26,8 @@ async fn main() {
             commands::com::check_user_by_name,
             commands::com::registration_user,
             commands::com::get_tasks,
+            commands::com::add_task,
+            commands::com::change_task,
             ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
