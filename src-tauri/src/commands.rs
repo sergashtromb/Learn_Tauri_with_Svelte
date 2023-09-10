@@ -81,13 +81,6 @@ pub mod com {
                 }
                 Err(why) => {
 
-                    // let oper = operations::Operation {
-                    //     type_operation: operations::TypeOperation::CreateUser,
-                    //     task: tasks::Task { id: -1, text: "".to_string(), is_done: false },
-                    //     user: db::User { id: -1, name: user_name, password: user_password }
-                    // };
-                    // operations::add_operation(oper).await;
-
                     return Err(why.to_string());
                 }
             }

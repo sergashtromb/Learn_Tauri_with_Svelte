@@ -7,7 +7,7 @@
 
     export let current_user = {};
     let tasks = [];
-
+    let visible_done = false;
 
     async function get_tasks(user_id) {
         await invoke("get_tasks", {userId: user_id}).then((result) => {
@@ -70,6 +70,11 @@
 
     }
 
+    // function change_visible_done() {
+    //     visible_done = visible_done ? false: true;
+    //     document.getElementById("task_is_done").style.visibility = visible_done;        
+    // }
+
 </script>
 
 <style>
@@ -82,6 +87,23 @@ ul {
   padding-inline-start: 0px;
 }
 
+#visible-task {
+
+    font: inherit;
+    background-color: black;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid black;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+
+}
+
+
+
 </style>
 
 <div id="tasks_list">
@@ -91,9 +113,10 @@ ul {
         <h3>Подождите....</h3>
 
     {:then value} 
-
+        <h4>Текущие задачи</h4>
         <ul>
-            {#each tasks as elem}
+            {#each tasks.filter(task => task.is_done === false) as elem}
+
                 <li>
                     <Task
                         tasks_text = {elem.text}
@@ -107,6 +130,29 @@ ul {
 
         </ul>
 
+        <button id="bt_add_task" on:click={add_task}>+ Добавить задачу</button>
+
+        <hr>
+
+        <!-- <h4><input type="checkbox" name="visible-task" id="visible-task" bind:value={visible_done} on:change={change_visible_done}>Выполненные задачи {tasks.filter(task => task.is_done === true).length}</h4> -->
+
+        <ul id="task_is_done">
+            {#each tasks.filter(task => task.is_done === true) as elem}
+                <li>
+                    <Task
+                        tasks_text = {elem.text}
+                        is_done = {elem.is_done}
+                        task_id = {elem.id}
+                        on:choose_task
+                        on:change_task_status={change_status}
+                    />
+                </li>
+            {/each}
+
+        </ul>    
+
+        
+        
     {:catch err}
 
         <h3>{err}</h3>
@@ -115,4 +161,3 @@ ul {
 
 </div>
 
-<button id="bt_add_task" on:click={add_task}>+ Добавить задачу</button>

@@ -55,13 +55,19 @@
     border: 0.15em solid black;
     border-radius: 0.15em;
     transform: translateY(-0.075em);
-}
-
-input {
-    width: 100%;
     margin-right: 10px;
     margin-top: 5px;
     margin-bottom: 0px;
+}
+
+input {
+    max-width: 98%;
+    padding: 8px 10px;
+}
+
+#edit-input {
+    display: flex;
+    width: 98%;
 }
 
 hr {
@@ -69,7 +75,10 @@ hr {
 }
 
 #edit-task {
+    display: block;
     padding-bottom: 20px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 </style>
@@ -83,7 +92,7 @@ hr {
             <h2>Редактирование задачи</h2>
             <hr />
             <h4>Текст задачи</h4>
-            <input type="text" bind:value={new_text}>
+            <input id="edit-input" type="text" bind:value={new_text}>
         </div>
 
         <button slot="butt" on:click={() => {

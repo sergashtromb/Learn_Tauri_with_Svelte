@@ -7,8 +7,7 @@
 
 #tools {
     height: 100vw;
-    width: calc(100vw - 85vw);
-    min-width: 160px;
+    width: 160px;
     position: fixed;
     z-index: 1;
     top: 0; 
@@ -19,17 +18,17 @@
     border-right: 3px solid rgb(29, 29, 29);
 }
 
-#tools button {
+/* #tools button {
     padding: 6px 8px 6px 16px;
     display: block;
-}
+} */
 </style>
 
 <div id="tools">
 
-    <button on:click={() => {
-        invoke("get_runtime");
+    <!-- <button on:click={() => {
+        
     }}>Получить все задачи с Базы данных</button>
-    <button>Ипорт задач из .md файлов</button>
+    <button>Ипорт задач из .md файлов</button> -->
     
 </div>

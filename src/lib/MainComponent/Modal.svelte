@@ -31,16 +31,21 @@
 
 <style>
 	dialog {
+		min-width: 350px;
 		width: calc(100vw - 25vw);
         background-color: #2f2f2f;
         border-radius: 0.2em;
 		border: none;
+		display: flex;
+		justify-content: center;
 	}
     #content {
+		margin: 0 auto;
         padding: 0;
         color: #fff;
         position: relative;
-		width: 90%;
+		width: 100%;
+		display: block;
     }
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
@@ -74,6 +79,10 @@
 		float: right;
 	}
 
+	#buttons_container {
+		width: 100%;
+		margin: 0 auto;
+	}
 </style>
 
 
